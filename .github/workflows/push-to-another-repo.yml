@@ -22,7 +22,7 @@ jobs:
 
     - name: Add remote repository
       run: |
-        git remote add target https://github.com/webdeveloper510/auto_push2
+        git remote add target https://github.com/webdeveloper510/auto_push2.git
         git fetch target
 
     - name: Debug - Show remotes
