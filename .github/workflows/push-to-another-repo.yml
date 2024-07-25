@@ -5,6 +5,9 @@ on:
     branches:
       - main  # Trigger this workflow on push to the 'main' branch
 
+permissions:
+  contents: write
+
 jobs:
   push-to-another-repo:
     runs-on: ubuntu-latest
