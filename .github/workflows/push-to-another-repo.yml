@@ -8,12 +8,12 @@ on:
 jobs:
   push-to-another-repo:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v3
       with:
-        # Fetch all branches, tags, and the history of the repository
-        fetch-depth: 0
+        fetch-depth: 0  # Fetch all branches, tags, and history
 
     - name: Set up Git
       run: |
@@ -33,7 +33,7 @@ jobs:
 
     - name: Push to the target repository
       run: |
-        git push target ${{ github.ref }}
+        git push target main
       env:
         GITHUB_TOKEN: ${{ secrets.TARGET_REPO_TOKEN }}
 
