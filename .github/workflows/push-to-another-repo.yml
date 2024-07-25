@@ -8,6 +8,7 @@ on:
 jobs:
   push-to-another-repo:
     runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}  # Adjust this condition if needed
 
     steps:
     - name: Checkout the repository
@@ -35,14 +36,9 @@ jobs:
       run: |
         git remote get-url target
 
-    - name: Debug - Verify Token
-      run: echo ${{ secrets.TARGET_REPO_TOKEN }}
-
     - name: Push to the target repository
       run: |
         git push https://webdeveloper510:${{ secrets.TARGET_REPO_TOKEN }}@github.com/webdeveloper510/auto_push2.git main
-      env:
-        GITHUB_TOKEN: ${{ secrets.TARGET_REPO_TOKEN }}
 
     - name: Debug - Show commit history
       run: git log -5
