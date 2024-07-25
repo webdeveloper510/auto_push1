@@ -31,16 +31,9 @@ jobs:
     - name: Debug - Show branches
       run: git branch -a
 
-    - name: Debug - Check remote URL
-      run: |
-        git remote get-url target
-
-    - name: Debug - Verify Token
-      run: echo ${{ secrets.TARGET_REPO_TOKEN }}
-
     - name: Push to the target repository
       run: |
-        git push https://webdeveloper510:${{ secrets.TARGET_REPO_TOKEN }}@github.com/webdeveloper510/auto_push2.git main
+        git push target main
       env:
         GITHUB_TOKEN: ${{ secrets.TARGET_REPO_TOKEN }}
 
