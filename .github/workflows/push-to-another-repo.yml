@@ -13,6 +13,7 @@ jobs:
     - name: Checkout the repository
       uses: actions/checkout@v3
       with:
+        # Fetch all branches, tags, and the history of the repository
         fetch-depth: 0
 
     - name: Set up Git
@@ -22,7 +23,7 @@ jobs:
 
     - name: Add remote repository
       run: |
-        git remote add target https://webdeveloper510:${{ secrets.TARGET_REPO_TOKEN }}@github.com/webdeveloper510/auto_push2.git
+        git remote add target https://github.com/webdeveloper510/auto_push2.git
         git fetch target
 
     - name: Debug - Show remotes
@@ -32,7 +33,10 @@ jobs:
       run: git branch -a
 
     - name: Push to the target repository
-      run: git push target main
+      run: |
+        git push target main
+      env:
+        GITHUB_TOKEN: ${{ secrets.TARGET_REPO_TOKEN }}
 
     - name: Debug - Show commit history
       run: git log -5
