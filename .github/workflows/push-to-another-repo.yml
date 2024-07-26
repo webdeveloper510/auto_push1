@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout current repo
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.MY_TOKEN }}
 
       - name: Configure git
         run: |
@@ -30,10 +32,11 @@ jobs:
       - name: Add changes
         run: |
           git add .
-          git commit -m "Synced with auto_push2 repo"
-          git push origin main
+          git commit -m "Synced with auto_push2 repo" || echo "No changes to commit"
 
       - name: Push changes
-        run: git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+        run: |
+          git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}.git
+          git push origin main
