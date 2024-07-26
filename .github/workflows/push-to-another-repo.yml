@@ -1,44 +1,39 @@
-name: Push Changes to Another Repo
+name: Pull and Push Code
 
 on:
   push:
     branches:
-      - main  # Trigger this workflow on push to the 'main' branch
-
-permissions:
-  contents: write
+      - main
 
 jobs:
-  push-to-another-repo:
+  pull_and_push:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout the repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0  # Fetch all branches, tags, and history
+      - name: Checkout current repo
+        uses: actions/checkout@v3
 
-    - name: Set up Git
-      run: |
-        git config --global user.name "webdeveloper510"
-        git config --global user.email "developerweb6@gmail.com"
+      - name: Configure git
+        run: |
+          git config --global user.name 'webdeveloper510'
+          git config --global user.email 'developerweb6@gmail.com'
 
-    - name: Add remote repository
-      run: |
-        git remote add target https://github.com/webdeveloper510/auto_push2.git
-        git fetch target
+      - name: Checkout target repo
+        run: |
+          git clone https://github.com/webdeveloper510/auto_push2.git temp-repo
+          cd temp-repo
+          git pull origin main
+          cd ..
+          rsync -a temp-repo/ .
+          rm -rf temp-repo
 
-    - name: Debug - Show remotes
-      run: git remote -v
+      - name: Add changes
+        run: |
+          git add .
+          git commit -m "Synced with auto_push2 repo"
+          git push origin main
 
-    - name: Debug - Show branches
-      run: git branch -a
-
-    - name: Push to the target repository
-      run: |
-        git push target ${{ github.ref }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.TARGET_REPO_TOKEN }}
-
-    - name: Debug - Show commit history
-      run: git log -5
+      - name: Push changes
+        run: git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
