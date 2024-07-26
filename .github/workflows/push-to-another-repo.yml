@@ -1,4 +1,4 @@
-name: Pull and Push Code 
+name: Pull and Push Code
 
 on:
   push:
@@ -20,25 +20,23 @@ jobs:
           git config --global user.name 'webdeveloper510'
           git config --global user.email 'developerweb6@gmail.com'
 
-      - name: Checkout target repo
+      - name: Checkout target repo (modified)
         run: |
-          git clone https://github.com/webdeveloper510/auto_push2.git temp-repo
-          cd temp-repo
+          # Consider using a submodule or a separate job for efficiency
+
+          git clone https://github.com/webdeveloper510/auto_push2.git target-repo
+          cd target-repo
           git pull origin main
           cd ..
-          rsync -a temp-repo/ .
-          rm -rf temp-repo
+          rsync -a target-repo/ .
 
       - name: Add changes
         run: |
           git add .
           git commit -m "Synced with auto_push2 repo" || echo "No changes to commit"
 
-      - name: Push changes
+      - name: Push changes (using PAT)
         env:
           GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
         run: |
-          git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}.git
           git push origin main
-
-
